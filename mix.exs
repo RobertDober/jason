@@ -8,6 +8,7 @@ defmodule Jason.Mixfile do
       app: :jason,
       version: @version,
       elixir: "~> 1.4",
+      elixirc_paths: elixirc_paths(Mix.env),
       start_permanent: Mix.env() == :prod,
       consolidate_protocols: Mix.env() != :test,
       deps: deps(),
@@ -32,6 +33,10 @@ defmodule Jason.Mixfile do
       {:ex_doc, "~> 0.18", only: :docs},
     ] ++ maybe_stream_data()
   end
+
+  defp elixir_cpath(mix_env)
+  defp elixirc_paths(:test), do: ["lib", "test/support"]
+  defp elixirc_paths(_), do: ["lib"]
 
   defp maybe_stream_data() do
     if Version.match?(System.version(), "~> 1.5") do

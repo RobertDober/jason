@@ -3,7 +3,7 @@ defmodule Jason do
   A blazing fast JSON parser and generator in pure Elixir.
   """
 
-  alias Jason.{Encode, Decoder, DecodeError, EncodeError, Formatter}
+  alias Jason.{Encode, Decoder, DecodeError, EncodeError, Formatter, Streaming}
 
   @type escape :: :json | :unicode_safe | :html_safe | :javascript_safe
   @type maps :: :naive | :strict
@@ -56,9 +56,13 @@ defmodule Jason do
     Decoder.parse(input, format_decode_opts(opts))
   end
 
+  def stream(event_handler, input, opts \\ []) do
+    input = IO.iodata_to_binary(input)
+    Streaming.Decoder.parse(event_handler, input, format_decode_opts(opts))
+  end
   @doc """
   Parses a JSON value from `input` iodata.
-
+ 
   Similar to `decode/2` except it will unwrap the error tuple and raise
   in case of errors.
 
